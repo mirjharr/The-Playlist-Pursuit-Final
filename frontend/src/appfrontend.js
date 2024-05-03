@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
 function NavBar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           The Playlist Pursuit
@@ -24,28 +24,18 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" to="/getplaylist">
+              <Link className="nav-link" to="/getplaylistemotion">
                 Generate Playlist
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/getplaylistemotion">
+              <Link className="nav-link" to="/getplaylist">
                 See Our Collection
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/postplaylist">
-                POST a new Playlist
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/putplaylist">
-                PUT (modify) an Playlist
-              </Link>
-            </li>
-            <li className="nav-item">
               <Link className="nav-link" to="/deleteplaylist">
-                DELETE a Playlist
+                Admin
               </Link>
             </li>
             {
@@ -66,7 +56,7 @@ function App() {
   // GET all items
   const Getplaylist = () => {
     // Define hooks
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     const [playlists, setplaylists] = useState([]);
     // useEffect to load playlists when the page loads
     useEffect(() => {
@@ -99,13 +89,15 @@ function App() {
               src={el.embeddedHtml}
               width="100%"
               height="352"
-              frameBorder="0"
               allowfullscreen=""
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
             ></iframe>
           </div>
         ))}
+      <p>Don't see a playlist you like? <Link to='/postplaylist'>Click here</Link> to add a new playlist to our collection!</p>
+      <p>OR see incorrect information? Help us improve <Link to='/putplaylist'>here</Link></p>
+
       </div>
     );
   };
@@ -113,9 +105,26 @@ function App() {
   // GET one item
   // GET one item
   const Getplaylistemotion = () => {
+    //need to find array of options
+    const [playlists, setplaylists] = useState([]);
+    useEffect(() => {
+      fetch("http://localhost:8081/playlists")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Show playlist of playlists:", data);
+          setplaylists(data);
+        });
+    }, []);
+    const options = ["Select"];
+    //create array of options
+    if(playlists.length >0){
+      var index = 0;
+      for(index = 0; index < playlists.length; index++){
+        options[index + 1] = playlists[index].emotion;
+      }
+    }
     // Define hooks
     const [onePlaylist, setonePlaylist] = useState(null); // Initialize as null
-    const options = ["Select", "happy", "sad", "silly", "focused", "content"];
     const [mood, setMyMood] = useState(options[0]);
     //const navigate = useNavigate();
     // useEffect to load playlist once HOOK id is modified
@@ -126,9 +135,11 @@ function App() {
           .then((data) => {
             console.log("Show one playlist :", data);
             setonePlaylist(data);
-          });
+          })
+          .catch(error => console.error('Error:', error));
       }
     }, [`${mood}`]); // Fetch only when id changes
+
 
     // return
     return (
@@ -381,6 +392,7 @@ function App() {
   const Deleteplaylist = () => {
     // Define HOOKS
     //onst navigate = useNavigate();
+    
     const [playlists, setplaylists] = useState([
       {
         id: "",
@@ -397,8 +409,10 @@ function App() {
         .then((data) => {
           setplaylists(data);
           console.log("Load initial playlist of playlists in DELETE :", data);
+          alert("Please only proceed if you are an administrator of this website");
         });
     }, []);
+  
     // Function to review products like carousel
     function getOneByOnePlaylistNext() {
       if (playlists.length > 0) {
@@ -416,44 +430,47 @@ function App() {
     }
 
     // Delete de product by its id <- id is Hook
+
     const deleteOnePlaylist = (id) => {
       console.log("Playlist to delete :", id);
-      fetch(`http://localhost:8081/playlists/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: id }),
-      })
-        .then((response) => {
-          if (response.status != 200) {
-            return response.json().then((errData) => {
-              throw new Error(
-                `POST response was not ok :\n Status:${response.status}. \n Error: ${errData.error}`
+          fetch(`http://localhost:8081/playlists/${id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: id }),
+          })
+            .then((response) => {
+              if (response.status != 200) {
+                return response.json().then((errData) => {
+                  throw new Error(
+                    `POST response was not ok :\n Status:${response.status}. \n Error: ${errData.error}`
+                  );
+                });
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Delete a product completed : ", id);
+              console.log(data);
+              // reload playlists from the local playlists array
+              const newplaylists = playlists.filter(
+                (playlists) => playlists.id != id
               );
-            });
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Delete a product completed : ", id);
-          console.log(data);
-          // reload playlists from the local playlists array
-          const newplaylists = playlists.filter(
-            (playlists) => playlists.id != id
-          );
-          setplaylists(newplaylists);
-          // show alert
-          if (data) {
-            const key = Object.keys(data);
-            const value = Object.values(data);
-            alert(key + value);
-          }
+              setplaylists(newplaylists);
+              // show alert
+              if (data) {
+                const key = Object.keys(data);
+                const value = Object.values(data);
+                alert(key + value);
+              }
         })
         .catch((error) => {
-          console.error("Error adding item:", error);
-          alert("Error adding robot:" + error.message); // Display alert if there's an error
+          console.error("Error deleting item:", error);
+          alert("Error deleting playlist:" + error.message); // Display alert if there's an error
         });
-    };
 
+    };
+  
+  
     // return
     return (
       <div>

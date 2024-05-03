@@ -12,14 +12,11 @@ code {
     monospace;
 }
 
-.active {
-  background-color: rgb(175, 174, 222);
+.nav-item:visited{
+  background-color: rgb(117, 189, 16);
 }
 
-.buttons a:hover {
+.nav-item:hover {
   background-color: rgb(195, 192, 192);
 }
 
-.nav-item li.hover{
-  background-color: rgb(195, 192, 192);
-}
