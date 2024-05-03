@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
@@ -56,7 +56,6 @@ function App() {
   // GET all items
   const Getplaylist = () => {
     // Define hooks
-    const navigate = useNavigate();
     const [playlists, setplaylists] = useState([]);
     // useEffect to load playlists when the page loads
     useEffect(() => {
@@ -71,12 +70,6 @@ function App() {
     // return
     return (
       <div>
-        {/* Buttons to show CRUD */}
-        {/* <button onClick={() => navigate('/getplaylist')}>GET playlist</button>
-            <button onClick={() => navigate('/getplaylistemotion')}>GET Playlist by Emotion</button>
-            <button onClick={() => navigate('/postplaylist')}>POST a new Emotion</button>
-            <button onClick={() => navigate('/putplaylist')}>PUT (modify) a Playlsit</button>
-            <button onClick={() => navigate('/deleteplaylist')}>DELETE a Playlist</button> */}
         {NavBar()}
 
         {/* Show all playlists*/}
@@ -144,12 +137,7 @@ function App() {
     // return
     return (
       <div>
-        {/* Buttons to show CRUD */}
-        {/* <button onClick={() => navigate('/getplaylist')}>GET playlist</button>
-            <button onClick={() => navigate('/getplaylistemotion')}>GET Playlist by Emotion</button>
-            <button onClick={() => navigate('/postplaylist')}>POST a new Emotion</button>
-            <button onClick={() => navigate('/putplaylist')}>PUT (modify) a Playlsit</button>
-            <button onClick={() => navigate('/deleteplaylist')}>DELETE a Playlist</button> */}
+      
         {NavBar()}
         <div>
           <select
@@ -229,11 +217,7 @@ function App() {
     //return
     return (
       <div>
-        {/* <button onClick={() => navigate('/getplaylist')}>GET playlist</button>
-            <button onClick={() => navigate('/getplaylistemotion')}>GET Playlist by Emotion</button>
-            <button onClick={() => navigate('/postplaylist')}>POST a new Emotion</button>
-            <button onClick={() => navigate('/putplaylist')}>PUT (modify) a Playlist</button>
-            <button onClick={() => navigate('/deleteplaylist')}>DELETE a Playlist</button> */}
+      
         {NavBar()}
         {/* Form to input data */}
         <form onSubmit={handleSubmit}>
@@ -330,11 +314,6 @@ function App() {
     //return
     return (
       <div>
-        {/* <button onClick={() => navigate('/getplaylist')}>GET playlist</button>
-            <button onClick={() => navigate('/getplaylistemotion')}>GET Playlist by Emotion</button>
-            <button onClick={() => navigate('/postplaylist')}>POST a new Emotion</button>
-            <button onClick={() => navigate('/putplaylist')}>PUT (modify) a Playlist</button>
-            <button onClick={() => navigate('/deleteplaylist')}>DELETE a Playlist</button> */}
         {NavBar()}
 
         {/* Form to input data */}
@@ -474,11 +453,6 @@ function App() {
     // return
     return (
       <div>
-        {/* <button onClick={() => navigate('/getplaylist')}>GET playlist</button>
-        <button onClick={() => navigate('/getplaylistemotion')}>GET Playlist by Emotion</button>
-        <button onClick={() => navigate('/postplaylist')}>POST a new Emotion</button>
-        <button onClick={() => navigate('/putplaylist')}>PUT (modify) a Playlist</button>
-        <button onClick={() => navigate('/deleteplaylist')}>DELETE a Playlist</button> */}
         {NavBar()}
 
         {/* Buttons to simulate carousel */}
@@ -497,7 +471,6 @@ function App() {
             src={playlists[index].embeddedHtml}
             width="100%"
             height="352"
-            frameBorder="0"
             allowfullscreen=""
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy"
