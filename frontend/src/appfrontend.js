@@ -83,7 +83,7 @@ function App() {
               src={el.embeddedHtml}
               width="100%"
               height="352"
-              allowfullscreen=""
+              allowFullScreen=""
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
             ></iframe>
@@ -113,7 +113,7 @@ function App() {
     //create array of options
     if(playlists.length >0){
       var index = 0;
-      for(index = 0; index < playlists.length; index++){
+      for(index = 0; index < playlists.length; index+=3){
         options[index + 1] = playlists[index].emotion;
       }
     }
@@ -151,8 +151,8 @@ function App() {
           </select>
         </div>
         {onePlaylist && (
-          <div key={onePlaylist.id}>
-            <div>Id: {onePlaylist.id}</div>
+          <div key={onePlaylist._id}>
+            <div>Id: {onePlaylist._id}</div>
             <div>Emotion: {onePlaylist.emotion}</div>
             <div>Description: {onePlaylist.description}</div>
             <iframe
