@@ -71,12 +71,13 @@ function App() {
     return (
       <div>
         {NavBar()}
-
+        
         {/* Show all playlists*/}
         {playlists.map((el) => (
-          <div key={el.id}>
-            <div>Id: {el.id}</div>
+          <div key={el._id}>
+            <div>Id: {el._id}</div>
             <div>Emotion: {el.emotion}</div>
+            <div>Weather: {el.weather}</div>
             <div>Description: {el.description}</div>
             <iframe
               src={el.embeddedHtml}
