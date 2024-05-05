@@ -71,14 +71,19 @@ function App() {
     return (
       <div>
         {NavBar()}
-
+        <img 
+        src="./images\companyLogo.png" 
+        alt="the playlist pursuit logo" 
+        style={{ paddingLeft: "550px" }}
+        >
+        </img>
         {/* Show all playlists*/}
         {playlists.map((el) => (
-          <div key={el.id}>
-            <div>Id: {el.id}</div>
-            <div>Emotion: {el.emotion}</div>
-            <div>Weather: {el.weather}</div>
-            <div>Description: {el.description}</div>
+          <div style={{ marginLeft: "4%" , marginRight: "4%"}} key={el.id}>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Id: {el.id}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Emotion: {el.emotion}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Weather: {el.weather}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Description: {el.description}</div>
             <iframe
               src={el.embeddedHtml}
               width="100%"
@@ -87,7 +92,9 @@ function App() {
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
             ></iframe>
+            <br></br> <br></br>
           </div>
+         
         ))}
         <p>
           Don't see a playlist you like?{" "}
@@ -149,6 +156,7 @@ function App() {
           <div>
             <label htmlFor="mood-select">Mood:</label>
             <select
+              style={{ marginLeft: "10px" }}
               id="mood-select"
               onChange={(e) => setSelectedMood(e.target.value)}
               value={selectedMood}
@@ -159,10 +167,12 @@ function App() {
                 </option>
               ))}
             </select>
+
           </div>
           <div style={{ marginTop: "10px" }}>
-            <label htmlFor="weather-select">Weather:</label>
+            <label htmlFor="weather-select">Weather: </label>
             <select
+              style={{ marginLeft: "10px" }}
               id="weather-select"
               onChange={(e) => setSelectedWeather(e.target.value)}
               value={selectedWeather}
@@ -176,11 +186,12 @@ function App() {
           </div>
         </div>
         {filteredPlaylist && (
-          <div key={filteredPlaylist.id}>
-            <div>Id: {filteredPlaylist.id}</div>
-            <div>Emotion: {filteredPlaylist.emotion}</div>
-            <div>Weather: {filteredPlaylist.weather}</div>
-            <div>Description: {filteredPlaylist.description}</div>
+          <div style={{ marginLeft: "4%", marginRight: "4%" }}key={filteredPlaylist.id}>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Id: {filteredPlaylist.id}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Emotion: {filteredPlaylist.emotion}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Weather: {filteredPlaylist.weather}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Description: {filteredPlaylist.description}</div>
+            <br></br>
             <iframe
               src={filteredPlaylist.embeddedHtml}
               width="100%"
@@ -253,6 +264,7 @@ function App() {
             name="id"
             value={formData.id}
             onChange={handleChange}
+            style={{ marginLeft: "4%" }}
             placeholder="ID"
             required
           />{" "}
@@ -262,6 +274,7 @@ function App() {
             name="emotion"
             value={formData.emotion}
             onChange={handleChange}
+            style={{ marginLeft: "4%" }}
             placeholder="Emotion"
             required
           />{" "}
@@ -271,6 +284,7 @@ function App() {
             name="description"
             value={formData.description}
             onChange={handleChange}
+            style={{ marginLeft: "4%" }}
             placeholder="Description"
             required
           />{" "}
@@ -280,11 +294,12 @@ function App() {
             name="embeddedHtml"
             value={formData.embeddedHtml}
             onChange={handleChange}
+            style={{ marginLeft: "4%" }}
             placeholder="Link"
             required
           />{" "}
           <br />
-          <button type="submit">Submit</button>
+          <button style={{ marginLeft: "7%" }} type="submit">Submit</button>
         </form>
       </div>
     );
@@ -352,7 +367,7 @@ function App() {
             onChange={handleChange}
             placeholder="ID"
             required
-            style={{ marginLeft: "2%" }}
+            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -362,7 +377,7 @@ function App() {
             onChange={handleChange}
             placeholder="Emotion"
             required
-            style={{ marginLeft: "2%" }}
+            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -372,7 +387,7 @@ function App() {
             onChange={handleChange}
             placeholder="Description"
             required
-            style={{ marginLeft: "2%" }}
+            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -382,7 +397,7 @@ function App() {
             onChange={handleChange}
             placeholder="URL"
             required
-            style={{ marginLeft: "2%" }}
+            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <button type="submit" style={{ marginLeft: "5%" }}>
@@ -511,6 +526,7 @@ function App() {
       <div>
         {NavBar()}
         <div class="container">
+          <br></br>
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div class="col">
               <div class="cards">
@@ -587,7 +603,7 @@ function App() {
             </div>
           </div>
         </div>
-        <div style={{ marginLeft: "35%" }}>
+        <div style={{ marginLeft: "33%" }}>
           <h7>
             <br />
             SE/ComS319 Construction of User Interfaces, Spring 2024
@@ -595,7 +611,7 @@ function App() {
             <br />
           </h7>
         </div>
-        <div style={{ marginLeft: "25%" }}>
+        <div style={{ marginLeft: "20%" }}>
           <h8>
             5/9/2024 Dr. Abraham N. Aldaco Gastelum aaldaco@iastate.edu Dr. Ali
             Jannesari jannesar@iastate.edu
