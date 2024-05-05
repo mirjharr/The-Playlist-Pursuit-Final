@@ -71,11 +71,11 @@ function App() {
     return (
       <div>
         {NavBar()}
-        
+
         {/* Show all playlists*/}
         {playlists.map((el) => (
-          <div key={el._id}>
-            <div>Id: {el._id}</div>
+          <div key={el.id}>
+            <div>Id: {el.id}</div>
             <div>Emotion: {el.emotion}</div>
             <div>Weather: {el.weather}</div>
             <div>Description: {el.description}</div>
@@ -89,77 +89,103 @@ function App() {
             ></iframe>
           </div>
         ))}
-      <p>Don't see a playlist you like? <Link to='/postplaylist'>Click here</Link> to add a new playlist to our collection!</p>
-      <p>OR see incorrect information? Help us improve <Link to='/putplaylist'>here</Link></p>
-
+        <p>
+          Don't see a playlist you like?{" "}
+          <Link to="/postplaylist">Click here</Link> to add a new playlist to
+          our collection!
+        </p>
+        <p>
+          OR see incorrect information? Help us improve{" "}
+          <Link to="/putplaylist">here</Link>
+        </p>
       </div>
     );
   };
 
-  // GET one item
-  // GET one item
   const Getplaylistemotion = () => {
-    //need to find array of options
-    const [playlists, setplaylists] = useState([]);
+    const [playlists, setPlaylists] = useState([]);
+    const [moodOptions, setMoodOptions] = useState(["Select"]);
+    const [weatherOptions, setWeatherOptions] = useState(["Select"]);
+    const [selectedMood, setSelectedMood] = useState("Select");
+    const [selectedWeather, setSelectedWeather] = useState("Select");
+    const [filteredPlaylist, setFilteredPlaylist] = useState(null);
+
     useEffect(() => {
       fetch("http://localhost:8081/playlists")
         .then((response) => response.json())
         .then((data) => {
-          console.log("Show playlist of playlists:", data);
-          setplaylists(data);
-        });
+          console.log("Fetched playlists:", data);
+          setPlaylists(data);
+          getByMoodWeather(data);
+        })
+        .catch((error) => console.error("Error:", error));
     }, []);
-    const options = ["Select"];
-    //create array of options
-    if(playlists.length >0){
-      var index = 0;
-      for(index = 0; index < playlists.length; index+=3){
-        options[index + 1] = playlists[index].emotion;
-      }
-    }
-    // Define hooks
-    const [onePlaylist, setonePlaylist] = useState(null); // Initialize as null
-    const [mood, setMyMood] = useState(options[0]);
-    //const navigate = useNavigate();
-    // useEffect to load playlist once HOOK id is modified
+
+
+    const getByMoodWeather = (data) => {
+      const moodSet = new Set(["Select"]);
+      const weatherSet = new Set(["Select"]);
+      data.forEach((playlist) => {
+        moodSet.add(playlist.emotion);
+        weatherSet.add(playlist.weather);
+      });
+      setMoodOptions(Array.from(moodSet));
+      setWeatherOptions(Array.from(weatherSet));
+    };
+
     useEffect(() => {
-      if (`${mood}`) {
-        fetch(`http://localhost:8081/playlists/${mood}`)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Show one playlist :", data);
-            setonePlaylist(data);
-          })
-          .catch(error => console.error('Error:', error));
-      }
-    }, [`${mood}`]); // Fetch only when id changes
+      const result = playlists.filter(
+        (playlist) =>
+          (selectedMood === "Select" || playlist.emotion === selectedMood) &&
+          (selectedWeather === "Select" || playlist.weather === selectedWeather)
+      );
+      setFilteredPlaylist(result.length > 0 ? result[0] : null); 
+    }, [selectedMood, selectedWeather, playlists]);
 
-
-    // return
     return (
       <div>
-      
         {NavBar()}
-        <div>
-          <select
-            onChange={(e) => setMyMood(e.target.value)}
-            defaultValue={mood}
-          >
-            {options.map((option, idx) => (
-              <option key={idx}>{option}</option>
-            ))}
-          </select>
+        <div style={{ padding: "20px" }}>
+          <div>
+            <label htmlFor="mood-select">Mood:</label>
+            <select
+              id="mood-select"
+              onChange={(e) => setSelectedMood(e.target.value)}
+              value={selectedMood}
+            >
+              {moodOptions.map((mood, idx) => (
+                <option key={idx} value={mood}>
+                  {mood}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <label htmlFor="weather-select">Weather:</label>
+            <select
+              id="weather-select"
+              onChange={(e) => setSelectedWeather(e.target.value)}
+              value={selectedWeather}
+            >
+              {weatherOptions.map((weather, idx) => (
+                <option key={idx} value={weather}>
+                  {weather}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        {onePlaylist && (
-          <div key={onePlaylist._id}>
-            <div>Id: {onePlaylist._id}</div>
-            <div>Emotion: {onePlaylist.emotion}</div>
-            <div>Description: {onePlaylist.description}</div>
+        {filteredPlaylist && (
+          <div key={filteredPlaylist.id}>
+            <div>Id: {filteredPlaylist.id}</div>
+            <div>Emotion: {filteredPlaylist.emotion}</div>
+            <div>Weather: {filteredPlaylist.weather}</div>
+            <div>Description: {filteredPlaylist.description}</div>
             <iframe
-              src={onePlaylist.embeddedHtml}
+              src={filteredPlaylist.embeddedHtml}
               width="100%"
               height="352"
-              allowfullscreen=""
+              allowFullScreen
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
             ></iframe>
@@ -218,7 +244,6 @@ function App() {
     //return
     return (
       <div>
-      
         {NavBar()}
         {/* Form to input data */}
         <form onSubmit={handleSubmit}>
@@ -372,7 +397,7 @@ function App() {
   const Deleteplaylist = () => {
     // Define HOOKS
     //onst navigate = useNavigate();
-    
+
     const [playlists, setplaylists] = useState([
       {
         id: "",
@@ -389,10 +414,12 @@ function App() {
         .then((data) => {
           setplaylists(data);
           console.log("Load initial playlist of playlists in DELETE :", data);
-          alert("Please only proceed if you are an administrator of this website");
+          alert(
+            "Please only proceed if you are an administrator of this website"
+          );
         });
     }, []);
-  
+
     // Function to review products like carousel
     function getOneByOnePlaylistNext() {
       if (playlists.length > 0) {
@@ -413,44 +440,42 @@ function App() {
 
     const deleteOnePlaylist = (id) => {
       console.log("Playlist to delete :", id);
-          fetch(`http://localhost:8081/playlists/${id}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: id }),
-          })
-            .then((response) => {
-              if (response.status != 200) {
-                return response.json().then((errData) => {
-                  throw new Error(
-                    `POST response was not ok :\n Status:${response.status}. \n Error: ${errData.error}`
-                  );
-                });
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log("Delete a product completed : ", id);
-              console.log(data);
-              // reload playlists from the local playlists array
-              const newplaylists = playlists.filter(
-                (playlists) => playlists.id != id
+      fetch(`http://localhost:8081/playlists/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id }),
+      })
+        .then((response) => {
+          if (response.status != 200) {
+            return response.json().then((errData) => {
+              throw new Error(
+                `POST response was not ok :\n Status:${response.status}. \n Error: ${errData.error}`
               );
-              setplaylists(newplaylists);
-              // show alert
-              if (data) {
-                const key = Object.keys(data);
-                const value = Object.values(data);
-                alert(key + value);
-              }
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Delete a product completed : ", id);
+          console.log(data);
+          // reload playlists from the local playlists array
+          const newplaylists = playlists.filter(
+            (playlists) => playlists.id != id
+          );
+          setplaylists(newplaylists);
+          // show alert
+          if (data) {
+            const key = Object.keys(data);
+            const value = Object.values(data);
+            alert(key + value);
+          }
         })
         .catch((error) => {
           console.error("Error deleting item:", error);
           alert("Error deleting playlist:" + error.message); // Display alert if there's an error
         });
-
     };
-  
-  
+
     // return
     return (
       <div>
@@ -562,20 +587,19 @@ function App() {
             </div>
           </div>
         </div>
-        <div style={{marginLeft: "35%"}}>
-        <h7 >
-          <br />
-          SE/ComS319 Construction of User Interfaces, Spring 2024
-          <br />
-          <br />
+        <div style={{ marginLeft: "35%" }}>
+          <h7>
+            <br />
+            SE/ComS319 Construction of User Interfaces, Spring 2024
+            <br />
+            <br />
           </h7>
         </div>
-        <div style={{marginLeft:"25%"}}>
+        <div style={{ marginLeft: "25%" }}>
           <h8>
-        5/9/2024
-          Dr. Abraham N. Aldaco Gastelum aaldaco@iastate.edu
-          Dr. Ali Jannesari jannesar@iastate.edu
-        </h8>
+            5/9/2024 Dr. Abraham N. Aldaco Gastelum aaldaco@iastate.edu Dr. Ali
+            Jannesari jannesar@iastate.edu
+          </h8>
         </div>
       </div>
     );
