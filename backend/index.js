@@ -106,9 +106,10 @@ app.post("/playlists", async (req, res) => {
         // Proceed to add new item
         const newDocument = {
             "id": Number(req.body.id),
+            "embeddedHtml": req.body.embeddedHtml,
             "emotion": req.body.emotion,
-            "description": req.body.description,
-            "embeddedHtml": req.body.embeddedHtml
+            "weather": req.body.weather,
+            "description": req.body.description
         };
 
         const insertResult = await collection.insertOne(newDocument);

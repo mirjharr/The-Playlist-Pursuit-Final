@@ -212,9 +212,11 @@ function App() {
     // const navigate = useNavigate();
     const [formData, setFormData] = useState({
       id: "",
-      emotion: "",
-      description: "",
       embeddedHtml: "",
+      emotion: "",
+      weather: "",
+      description: ""
+
     });
     // Function to add input in formData HOOK using operator ...
     const handleChange = (e) => {
@@ -281,6 +283,16 @@ function App() {
           <br />
           <input
             type="text"
+            name="weather"
+            value={formData.weather}
+            onChange={handleChange}
+            placeholder="Weather"
+            required
+            style={{ marginLeft: "4%" }}
+          />{" "}
+          <br />
+          <input
+            type="text"
             name="description"
             value={formData.description}
             onChange={handleChange}
@@ -310,9 +322,11 @@ function App() {
     //const navigate = useNavigate();
     const [formData, setFormData] = useState({
       id: "",
-      emotion: "",
-      description: "",
       embeddedHtml: "",
+      emotion: "",
+      weather:"",
+      description: ""
+      
     });
 
     // Function to add input in formData HOOK using operator ...
@@ -376,6 +390,16 @@ function App() {
             value={formData.emotion}
             onChange={handleChange}
             placeholder="Emotion"
+            required
+            style={{ marginLeft: "4%" }}
+          />{" "}
+          <br />
+          <input
+            type="text"
+            name="weather"
+            value={formData.weather}
+            onChange={handleChange}
+            placeholder="Weather"
             required
             style={{ marginLeft: "4%" }}
           />{" "}
