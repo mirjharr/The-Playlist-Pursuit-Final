@@ -61,7 +61,7 @@ function App() {
         id: "",
         embeddedHtml: "",
         emotion: "",
-        mood:"",
+        mood: "",
         description: ""
       },
     ]);
@@ -93,9 +93,9 @@ function App() {
 
     // return
     return (
-      <div style={{height:"100vh"}} class="text-center text-bg-dark">
+      <div style={{ height: "120vh" }} className="text-center text-bg-dark">
         {NavBar()}
-        
+
         {/* Show all playlists*/}
         <div style={{ padding: "40px" }} key={playlists[index].id}>
           Id:{playlists[index].id} <br />
@@ -112,7 +112,7 @@ function App() {
           ></iframe>
         </div>
         <button class="btn btn-lg btn-light fw-bold border-white" onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
-        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft:"10px"}} onClick={() => getOneByOnePlaylistNext()}>Next</button>
+        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft: "10px" }} onClick={() => getOneByOnePlaylistNext()}>Next</button>
         <p>
           Don't see a playlist you like?{" "}
           <Link to="/postplaylist">Click here</Link> to add a new playlist to
@@ -163,19 +163,19 @@ function App() {
           (selectedMood === "" || playlist.emotion === selectedMood) &&
           (selectedWeather === "" || playlist.weather === selectedWeather)
       );
-      setFilteredPlaylist(result.length > 0 ? result[0] : null); 
+      setFilteredPlaylist(result.length > 0 ? result[0] : null);
     }, [selectedMood, selectedWeather, playlists]);
 
     return (
-      <div style={{height:"100vh"}} class="h-100 text-center text-bg-dark">
+      <div style={{ height: "100vh" }} class="h-100 text-center text-bg-dark">
         {NavBar()}
-        <img 
-        src="./images\companyLogo.png" 
-        alt="the playlist pursuit logo" 
-        width="300"
+        <img
+          src="./images\companyLogo.png"
+          alt="the playlist pursuit logo"
+          width="300"
         >
         </img>
-        <div style={{ padding: "20px", height:"100vh"}}>
+        <div style={{ padding: "20px", height: "100vh" }}>
           <div>
             <select
               class="btn btn-lg btn-light fw-bold border-white bg-white dropdown-toggle"
@@ -190,7 +190,7 @@ function App() {
               ))}
             </select>
             <select
-              style={{ marginLeft: "10px"}}
+              style={{ marginLeft: "10px" }}
               class="btn btn-lg btn-light fw-bold border-white bg-white dropdown-toggle"
               id="weather-select"
               onChange={(e) => setSelectedWeather(e.target.value)}
@@ -203,29 +203,29 @@ function App() {
               ))}
             </select>
           </div>
-       <br />
-        {filteredPlaylist && (
-          <div style={{ marginLeft: "4%", marginRight: "4%" }}key={filteredPlaylist.id}>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>You chose: {filteredPlaylist.emotion} and {filteredPlaylist.weather}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>{filteredPlaylist.description}</div>
-            <br></br>
-            <iframe
-              src={filteredPlaylist.embeddedHtml}
-              width="100%"
-              height="352"
-              allowFullScreen
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            ></iframe>
-          </div>
-        )}
-       
-         </div>
-         <footer class="mt-auto text-white-50">
+          <br />
+          {filteredPlaylist && (
+            <div style={{ marginLeft: "4%", marginRight: "4%" }} key={filteredPlaylist.id}>
+              <div style={{ marginLeft: "2%", marginRight: "2%" }}>You chose: {filteredPlaylist.emotion} and {filteredPlaylist.weather}</div>
+              <div style={{ marginLeft: "2%", marginRight: "2%" }}>{filteredPlaylist.description}</div>
+              <br></br>
+              <iframe
+                src={filteredPlaylist.embeddedHtml}
+                width="100%"
+                height="352"
+                allowFullScreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              ></iframe>
+            </div>
+          )}
+
+        </div>
+        <footer class="mt-auto text-white-50">
           <h6>© 2024 Our Playlist Company, Inc</h6>
         </footer>
       </div>
-      
+
     );
   };
 
@@ -279,7 +279,7 @@ function App() {
     }; // end handleOnSubmit
     //return
     return (
-      <div style={{height:"100vh"}} class="text-center text-bg-dark">
+      <div style={{ height: "100vh" }} class="text-center text-bg-dark">
         {NavBar()}
         {/* Form to input data */}
         <form onSubmit={handleSubmit}>
@@ -332,7 +332,7 @@ function App() {
           <button type="submit">Submit</button>
         </form>
       </div>
-      
+
     );
   };
 
@@ -343,9 +343,9 @@ function App() {
       id: "",
       embeddedHtml: "",
       emotion: "",
-      weather:"",
+      weather: "",
       description: ""
-      
+
     });
 
     // Function to add input in formData HOOK using operator ...
@@ -387,7 +387,7 @@ function App() {
 
     //return
     return (
-      <div style={{height:"100vh"}} class="text-center text-bg-dark">
+      <div style={{ height: "100vh" }} class="text-center text-bg-dark">
         {NavBar()}
 
         {/* Form to input data */}
@@ -456,7 +456,7 @@ function App() {
         id: "",
         embeddedHtml: "",
         emotion: "",
-        mood:"",
+        mood: "",
         description: ""
       },
     ]);
@@ -512,12 +512,10 @@ function App() {
         .then((data) => {
           console.log("Delete a product completed : ", id);
           console.log(data);
-          // reload playlists from the local playlists array
-          const newplaylists = playlists.filter(
-            (playlists) => playlists.id != id
-          );
-          setplaylists(newplaylists);
-          // show alert
+          // // reload playlists from the local playlists array
+          const newPlaylists = playlists.filter((playlist) => playlist.id !== id);
+          setplaylists(newPlaylists);
+          // // show alert
           if (data) {
             const key = Object.keys(data);
             const value = Object.values(data);
@@ -532,7 +530,7 @@ function App() {
 
     // return
     return (
-      <div style={{height:"100vh"}} class="text-center text-bg-dark">
+      <div style={{ height: "100vh" }} class="text-center text-bg-dark">
         {NavBar()}
 
         {/* Buttons to simulate carousel */}
@@ -555,8 +553,8 @@ function App() {
         </div>
 
         <button class="btn btn-lg btn-light fw-bold border-white" onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
-        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft:"10px"}} onClick={() => getOneByOnePlaylistNext()}>Next</button>
-        <button class="btn btn-lg btn-light fw-bold border-white" style={{ marginLeft:"10px", backgroundColor: "red"}} onClick={() => deleteOnePlaylist(playlists[index].id)}>
+        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft: "10px" }} onClick={() => getOneByOnePlaylistNext()}>Next</button>
+        <button class="btn btn-lg btn-light fw-bold border-white" style={{ marginLeft: "10px", backgroundColor: "red" }} onClick={() => deleteOnePlaylist(playlists[index].id)}>
           Delete
         </button>
       </div>
@@ -565,7 +563,7 @@ function App() {
 
   const Studentinfo = () => {
     return (
-      <div style={{height:"100vh"}} class="text-center text-bg-dark">      
+      <div style={{ height: "100vh" }} class="text-center text-bg-dark">
         {NavBar()}
         <div class="container">
 

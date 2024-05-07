@@ -139,7 +139,7 @@ app.put("/playlists/:id", async (req, res) => {
         // Proceed to update the existing item
         const id = Number(req.params.id);
         const filter = { id: id }; // Filter to find the document by its ID
-        const update = { $set: req.body};          
+        const update = { $set: req.body };
         console.log(filter)
         console.log(update)
         const updateResult = await db.collection("playlists").updateOne(filter, update);
