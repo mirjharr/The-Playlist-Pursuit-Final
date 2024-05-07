@@ -167,7 +167,7 @@ function App() {
     }, [selectedMood, selectedWeather, playlists]);
 
     return (
-      <div style={{ height: "100vh" }} class="h-100 text-center text-bg-dark">
+      <div style={{ height: "200vh" }} class="text-center text-bg-dark">
         {NavBar()}
         <img
           src="./images\companyLogo.png"
@@ -175,7 +175,7 @@ function App() {
           width="300"
         >
         </img>
-        <div style={{ padding: "20px", height: "100vh" }}>
+        <div style={{ padding: "20px"}}>
           <div>
             <select
               class="btn btn-lg btn-light fw-bold border-white bg-white dropdown-toggle"
@@ -456,7 +456,7 @@ function App() {
         id: "",
         embeddedHtml: "",
         emotion: "",
-        mood: "",
+        weather: "",
         description: ""
       },
     ]);
@@ -530,12 +530,16 @@ function App() {
 
     // return
     return (
-      <div style={{ height: "100vh" }} class="text-center text-bg-dark">
+      <div style={{ height: "120vh" }} class="text-center text-bg-dark">
         {NavBar()}
 
         {/* Buttons to simulate carousel */}
         <h3>You are now in admin mode</h3>
-
+        <button class="btn btn-lg btn-light fw-bold border-white" onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
+        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft: "10px" }} onClick={() => getOneByOnePlaylistNext()}>Next</button>
+        <button class="btn btn-lg btn-light fw-bold border-white" style={{ marginLeft: "10px", backgroundColor: "red" }} onClick={() => deleteOnePlaylist(playlists[index].id)}>
+          Delete
+        </button>
         {/* Show product properties, one by one */}
         <div key={playlists[index].id}>
           Id:{playlists[index].id} <br />
@@ -552,11 +556,7 @@ function App() {
           ></iframe>
         </div>
 
-        <button class="btn btn-lg btn-light fw-bold border-white" onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
-        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft: "10px" }} onClick={() => getOneByOnePlaylistNext()}>Next</button>
-        <button class="btn btn-lg btn-light fw-bold border-white" style={{ marginLeft: "10px", backgroundColor: "red" }} onClick={() => deleteOnePlaylist(playlists[index].id)}>
-          Delete
-        </button>
+
       </div>
     );
   };
