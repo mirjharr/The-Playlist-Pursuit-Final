@@ -56,7 +56,16 @@ function App() {
   // GET all items
   const Getplaylist = () => {
     // Define hooks
-    const [playlists, setplaylists] = useState([]);
+    const [playlists, setplaylists] = useState([
+      {
+        id: "",
+        embeddedHtml: "",
+        emotion: "",
+        mood:"",
+        description: ""
+      },
+    ]);
+    const [index, setIndex] = useState(0);
     // useEffect to load playlists when the page loads
     useEffect(() => {
       fetch("http://localhost:8081/playlists")
@@ -67,35 +76,43 @@ function App() {
         });
     }, []);
 
+    function getOneByOnePlaylistNext() {
+      if (playlists.length > 0) {
+        if (index === playlists.length - 1) setIndex(0);
+        else setIndex(index + 1);
+      }
+    }
+
+    // Function to review products like carousel
+    function getOneByOnePlaylistPrev() {
+      if (playlists.length > 0) {
+        if (index === 0) setIndex(playlists.length - 1);
+        else setIndex(index - 1);
+      }
+    }
+
     // return
     return (
-      <div>
+      <div style={{height:"100vh"}} class="text-center text-bg-dark">
         {NavBar()}
-        <img 
-        src="./images\companyLogo.png" 
-        alt="the playlist pursuit logo" 
-        style={{ paddingLeft: "550px" }}
-        >
-        </img>
+        
         {/* Show all playlists*/}
-        {playlists.map((el) => (
-          <div style={{ marginLeft: "4%" , marginRight: "4%"}} key={el.id}>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Id: {el.id}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Emotion: {el.emotion}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Weather: {el.weather}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Description: {el.description}</div>
-            <iframe
-              src={el.embeddedHtml}
-              width="100%"
-              height="352"
-              allowFullScreen=""
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            ></iframe>
-            <br></br> <br></br>
-          </div>
-         
-        ))}
+        <div style={{ padding: "40px" }} key={playlists[index].id}>
+          Id:{playlists[index].id} <br />
+          Emotion: {playlists[index].emotion} <br />
+          Weather: {playlists[index].weather} <br />
+          Description: {playlists[index].description} <br />
+          <iframe
+            src={playlists[index].embeddedHtml}
+            width="100%"
+            height="352"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <button class="btn btn-lg btn-light fw-bold border-white" onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
+        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft:"10px"}} onClick={() => getOneByOnePlaylistNext()}>Next</button>
         <p>
           Don't see a playlist you like?{" "}
           <Link to="/postplaylist">Click here</Link> to add a new playlist to
@@ -130,8 +147,8 @@ function App() {
 
 
     const getByMoodWeather = (data) => {
-      const moodSet = new Set(["Select"]);
-      const weatherSet = new Set(["Select"]);
+      const moodSet = new Set(["Select Mood"]);
+      const weatherSet = new Set(["Select Weather"]);
       data.forEach((playlist) => {
         moodSet.add(playlist.emotion);
         weatherSet.add(playlist.weather);
@@ -143,20 +160,25 @@ function App() {
     useEffect(() => {
       const result = playlists.filter(
         (playlist) =>
-          (selectedMood === "Select" || playlist.emotion === selectedMood) &&
-          (selectedWeather === "Select" || playlist.weather === selectedWeather)
+          (selectedMood === "" || playlist.emotion === selectedMood) &&
+          (selectedWeather === "" || playlist.weather === selectedWeather)
       );
       setFilteredPlaylist(result.length > 0 ? result[0] : null); 
     }, [selectedMood, selectedWeather, playlists]);
 
     return (
-      <div>
+      <div style={{height:"100vh"}} class="h-100 text-center text-bg-dark">
         {NavBar()}
-        <div style={{ padding: "20px" }}>
+        <img 
+        src="./images\companyLogo.png" 
+        alt="the playlist pursuit logo" 
+        width="300"
+        >
+        </img>
+        <div style={{ padding: "20px", height:"100vh"}}>
           <div>
-            <label htmlFor="mood-select">Mood:</label>
             <select
-              style={{ marginLeft: "10px" }}
+              class="btn btn-lg btn-light fw-bold border-white bg-white dropdown-toggle"
               id="mood-select"
               onChange={(e) => setSelectedMood(e.target.value)}
               value={selectedMood}
@@ -167,12 +189,9 @@ function App() {
                 </option>
               ))}
             </select>
-
-          </div>
-          <div style={{ marginTop: "10px" }}>
-            <label htmlFor="weather-select">Weather: </label>
             <select
-              style={{ marginLeft: "10px" }}
+              style={{ marginLeft: "10px"}}
+              class="btn btn-lg btn-light fw-bold border-white bg-white dropdown-toggle"
               id="weather-select"
               onChange={(e) => setSelectedWeather(e.target.value)}
               value={selectedWeather}
@@ -184,13 +203,11 @@ function App() {
               ))}
             </select>
           </div>
-        </div>
+       <br />
         {filteredPlaylist && (
           <div style={{ marginLeft: "4%", marginRight: "4%" }}key={filteredPlaylist.id}>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Id: {filteredPlaylist.id}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Emotion: {filteredPlaylist.emotion}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Weather: {filteredPlaylist.weather}</div>
-            <div style={{ marginLeft: "2%", marginRight: "2%" }}>Description: {filteredPlaylist.description}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>You chose: {filteredPlaylist.emotion} and {filteredPlaylist.weather}</div>
+            <div style={{ marginLeft: "2%", marginRight: "2%" }}>{filteredPlaylist.description}</div>
             <br></br>
             <iframe
               src={filteredPlaylist.embeddedHtml}
@@ -202,7 +219,13 @@ function App() {
             ></iframe>
           </div>
         )}
+       
+         </div>
+         <footer class="mt-auto text-white-50">
+          <h6>© 2024 Our Playlist Company, Inc</h6>
+        </footer>
       </div>
+      
     );
   };
 
@@ -247,26 +270,25 @@ function App() {
         })
         .then((data) => {
           console.log(data);
-          alert("Item added successfully!");
+          alert("Playlist added successfully!");
         })
         .catch((error) => {
-          console.error("Error adding item:", error);
-          alert("Error adding robot:" + error.message); // Display alert if there's an error
+          console.error("Error adding playlist:", error);
+          alert("Error adding playlist:" + error.message); // Display alert if there's an error
         });
     }; // end handleOnSubmit
     //return
     return (
-      <div>
+      <div style={{height:"100vh"}} class="text-center text-bg-dark">
         {NavBar()}
         {/* Form to input data */}
         <form onSubmit={handleSubmit}>
-          <h1>Post a New Product</h1>
+          <h1>Add a Playlist to our Collection</h1>
           <input
             type="number"
             name="id"
             value={formData.id}
             onChange={handleChange}
-            style={{ marginLeft: "4%" }}
             placeholder="ID"
             required
           />{" "}
@@ -276,7 +298,6 @@ function App() {
             name="emotion"
             value={formData.emotion}
             onChange={handleChange}
-            style={{ marginLeft: "4%" }}
             placeholder="Emotion"
             required
           />{" "}
@@ -288,7 +309,6 @@ function App() {
             onChange={handleChange}
             placeholder="Weather"
             required
-            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -296,7 +316,6 @@ function App() {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            style={{ marginLeft: "4%" }}
             placeholder="Description"
             required
           />{" "}
@@ -306,14 +325,14 @@ function App() {
             name="embeddedHtml"
             value={formData.embeddedHtml}
             onChange={handleChange}
-            style={{ marginLeft: "4%" }}
             placeholder="Link"
             required
           />{" "}
           <br />
-          <button style={{ marginLeft: "7%" }} type="submit">Submit</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
+      
     );
   };
 
@@ -358,7 +377,7 @@ function App() {
         })
         .then((data) => {
           console.log(data);
-          alert("Item updated successfully!");
+          alert("Item updated successfully! Thank you for your feedback!");
         })
         .catch((error) => {
           console.error("Error updating item:", error);
@@ -368,12 +387,12 @@ function App() {
 
     //return
     return (
-      <div>
+      <div style={{height:"100vh"}} class="text-center text-bg-dark">
         {NavBar()}
 
         {/* Form to input data */}
         <form onSubmit={handleSubmit}>
-          <h1>Update Product</h1>
+          <h1>Update a Playlist</h1>
           <input
             type="number"
             name="id"
@@ -381,7 +400,6 @@ function App() {
             onChange={handleChange}
             placeholder="ID"
             required
-            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -391,7 +409,6 @@ function App() {
             onChange={handleChange}
             placeholder="Emotion"
             required
-            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -401,7 +418,6 @@ function App() {
             onChange={handleChange}
             placeholder="Weather"
             required
-            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -411,7 +427,6 @@ function App() {
             onChange={handleChange}
             placeholder="Description"
             required
-            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
           <input
@@ -421,10 +436,9 @@ function App() {
             onChange={handleChange}
             placeholder="URL"
             required
-            style={{ marginLeft: "4%" }}
           />{" "}
           <br />
-          <button type="submit" style={{ marginLeft: "5%" }}>
+          <button type="submit">
             Submit
           </button>
         </form>
@@ -440,9 +454,10 @@ function App() {
     const [playlists, setplaylists] = useState([
       {
         id: "",
-        emotion: "",
-        description: "",
         embeddedHtml: "",
+        emotion: "",
+        mood:"",
+        description: ""
       },
     ]);
     const [index, setIndex] = useState(0);
@@ -517,20 +532,17 @@ function App() {
 
     // return
     return (
-      <div>
+      <div style={{height:"100vh"}} class="text-center text-bg-dark">
         {NavBar()}
 
         {/* Buttons to simulate carousel */}
-        <h3>Delete one product:</h3>
-        <button onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
-        <button onClick={() => getOneByOnePlaylistNext()}>Next</button>
-        <button onClick={() => deleteOnePlaylist(playlists[index].id)}>
-          Delete
-        </button>
+        <h3>You are now in admin mode</h3>
+
         {/* Show product properties, one by one */}
         <div key={playlists[index].id}>
           Id:{playlists[index].id} <br />
           Emotion: {playlists[index].emotion} <br />
+          Weather: {playlists[index].weather} <br />
           Description: {playlists[index].description} <br />
           <iframe
             src={playlists[index].embeddedHtml}
@@ -541,16 +553,22 @@ function App() {
             loading="lazy"
           ></iframe>
         </div>
+
+        <button class="btn btn-lg btn-light fw-bold border-white" onClick={() => getOneByOnePlaylistPrev()}>Prev</button>
+        <button class="btn btn-lg btn-light fw-bold border-white bg-white" style={{ marginLeft:"10px"}} onClick={() => getOneByOnePlaylistNext()}>Next</button>
+        <button class="btn btn-lg btn-light fw-bold border-white" style={{ marginLeft:"10px", backgroundColor: "red"}} onClick={() => deleteOnePlaylist(playlists[index].id)}>
+          Delete
+        </button>
       </div>
     );
   };
 
   const Studentinfo = () => {
     return (
-      <div>
+      <div style={{height:"100vh"}} class="text-center text-bg-dark">      
         {NavBar()}
         <div class="container">
-          <br></br>
+
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div class="col">
               <div class="cards">
@@ -562,7 +580,6 @@ function App() {
                     height="400"
                     class="center"
                   />
-
                   <div class="card-body">
                     <h3>Julia Young</h3>
                     <p class="major">Software Engineering</p>
@@ -627,20 +644,19 @@ function App() {
             </div>
           </div>
         </div>
-        <div style={{ marginLeft: "33%" }}>
+        <div>
           <h7>
             <br />
             SE/ComS319 Construction of User Interfaces, Spring 2024
             <br />
-            <br />
           </h7>
         </div>
-        <div style={{ marginLeft: "20%" }}>
+        <footer>
           <h8>
             5/9/2024 Dr. Abraham N. Aldaco Gastelum aaldaco@iastate.edu Dr. Ali
             Jannesari jannesar@iastate.edu
           </h8>
-        </div>
+        </footer>
       </div>
     );
   };
