@@ -515,6 +515,7 @@ function App() {
           // // reload playlists from the local playlists array
           const newPlaylists = playlists.filter((playlist) => playlist.id !== id);
           setplaylists(newPlaylists);
+          setIndex(0);
           // // show alert
           if (data) {
             const key = Object.keys(data);
@@ -563,7 +564,7 @@ function App() {
 
   const Studentinfo = () => {
     return (
-      <div style={{ height: "100vh" }} class="text-center text-bg-dark">
+      <div style={{ height: "130vh" }} class="text-center text-bg-dark">
         {NavBar()}
         <div class="container">
 
